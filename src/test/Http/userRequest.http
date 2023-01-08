@@ -1,0 +1,86 @@
+### User Requests
+
+
+###  get tokens
+GET {{localhost}}/api/token
+Content-Type: application/json
+
+{
+  "id": "user"
+}
+> {%
+    client.global.set("Authentication",response.body.data.token);
+    client.global.set("Refresh",response.body.data.refreshToken);
+    client.log("authentication : "+client.global.get("Authentication"));
+%}
+
+
+### create user join
+
+POST {{localhost}}/join/
+Content-Type: application/json
+
+{
+  "id": "1234"
+}
+> {%
+    client.global.set("Authentication",response.body.data.token);
+    client.global.set("Refresh",response.body.data.refreshToken);
+    client.log("authentication : "+client.global.get("Authentication"));
+%}
+
+### logout  add black list 로그가 확인된다면 성공
+POST {{localhost}}/api/logout
+Authentication: {{Authentication}}
+
+
+
+
+### Get userDetails
+
+GET {{localhost}}/api/user
+Authentication: {{Authentication}}
+
+
+### updateUserDetail
+
+### ==> 400에러로 인한 postman test
+
+
+### user delete
+POST {{localhost}}/api/user/delete
+Content-Type: application/json
+Authentication: {{Authentication}}
+
+
+
+### Add Follower 팔로워 추가
+
+POST {{localhost}}/api/user/follow
+Content-Type: application/json
+Authentication: {{Authentication}}
+
+{
+  "followingUserSeq":27
+}
+
+### delete Follwer 팔로워 취소
+
+DELETE {{localhost}}/api/user/follow
+Content-Type: application/json
+Authentication: {{Authentication}}
+
+{
+ "followingUserSeq":25
+}
+
+### FOLLWER LIST 조회    , 나를 팔로우한 사용자
+
+GET {{localhost}}/api/user/follow/{{UserSeq}}
+Content-Type: application/json
+Authentication: {{Authentication}}
+
+### FOLLOWING LIST 조회   ,내가 팔로우한 사용자
+GET {{localhost}}/api/user/following/{{UserSeq}}
+Content-Type: application/json
+Authentication: {{Authentication}}
