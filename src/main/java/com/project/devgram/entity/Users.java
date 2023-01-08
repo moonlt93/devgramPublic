@@ -24,18 +24,17 @@ public class Users extends BaseEntity {
 
 	@Column(unique = true)
 	private String username;
-	private String password;
 	private String email;
 
 	@Enumerated(EnumType.STRING)
 	private ROLE role;
 
-	private String providerId;
 	private String annual;
 	private String job;
 
 	private int followCount;
 	private int followerCount;
+	private String pkId;
 
 	private String imageUrl;
 

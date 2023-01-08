@@ -34,7 +34,7 @@ public class PrincipalDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return users.getPassword();
+        return null;
     }
 
     @Override
