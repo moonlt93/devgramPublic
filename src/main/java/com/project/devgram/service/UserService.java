@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -38,8 +37,7 @@ public class UserService {
                     .role(user.getRole())
                     .followCount(user.getFollowCount())
                     .followerCount(user.getFollowerCount())
-                    .password(user.getPassword())
-                    .providerId(user.getProviderId())
+                    .providerId(user.getPkId())
                     .build();
         }
 
@@ -81,7 +79,7 @@ public class UserService {
         }
         Users users = Users.builder()
                 .username(username)
-                .providerId(dto.getId())
+                .pkId(dto.getId())
                 .email(dto.getEmail())
                 .role(RoleMaker(username))
                 .build();

@@ -49,9 +49,13 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
 	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
-	testCompileOnly 'junit:junit:4.12'
+	testCompileOnly 'junit:junit:4.13.1'
 	testRuntimeOnly 'org.junit.vintage:junit-vintage-engine:5.3.1'
 
+
+	// swagger
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
 	testImplementation group: 'org.testcontainers', name: 'testcontainers', version: '1.17.2'
 	testImplementation 'com.h2database:h2'

@@ -10,6 +10,10 @@ import com.project.devgram.service.FollowService;
 import com.project.devgram.service.UserService;
 import com.project.devgram.type.ROLE;
 import com.project.devgram.type.Response;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+
+
 
 @RestController
 @RequiredArgsConstructor
@@ -36,6 +42,7 @@ public class UserController {
 
 
 
+    @ApiOperation(value ="BLACKLIST 잔여 캐시 데이터삭제(refresh 토큰 제거)",notes = "요청시 'Authentication'이란 이름으로 accesstoken을 header에 첨부")
     @PostMapping("/api/logout")
     public void logout(HttpServletRequest request) {
 
@@ -48,12 +55,11 @@ public class UserController {
         if (redis) {
             redisService.blackListPush(token);
 
-            log.info("add black list ");
         }
 
     }
 
-
+    @ApiOperation(value ="유저 정보 조회",notes = "요청시 'Authentication'이란 이름으로 accesstoken을 header에 첨부")
     @GetMapping("/api/user")
     public UserDto getUserDetails(HttpServletRequest request) {
 
@@ -64,10 +70,10 @@ public class UserController {
         return userService.getUserDetails(username);
 
     }
-
+    @ApiOperation(value ="유저정보수정",notes = "요청시 access토큰 첨부")
     @PutMapping("/api/user")
     public void updateUserDetails(HttpServletRequest request,
-                                  @RequestPart(value="user") UserDto dto
+                                   @RequestPart(value="user") UserDto dto
                                   ,@RequestPart(value = "file", required = false) MultipartFile file) throws IOException {
 
 
@@ -81,6 +87,7 @@ public class UserController {
 
     }
 
+    @ApiOperation(value ="유저가입취소",notes = "요청시 access토큰 첨부")
     @PostMapping("/api/user/delete")
     public void deleteUserDetails(HttpServletRequest request){
         String token = request.getHeader("Authentication");
@@ -90,8 +97,8 @@ public class UserController {
 
     }
 
-
-
+    
+    @ApiOperation(value ="팔로잉추가",notes = "요청시 access토큰 첨부")
     @PostMapping("/api/user/follow")
     public CommonDto<?> followingUsers(HttpServletRequest request, @Valid @RequestBody FollowDto dto, BindingResult bindingResult){
 
@@ -105,7 +112,7 @@ public class UserController {
 
 
     }
-
+    @ApiOperation(value ="팔로잉취소",notes = "요청시 access토큰 첨부")
     @DeleteMapping("/api/user/follow")
     public CommonDto<?> followingUserDelete(HttpServletRequest request, @RequestBody @Valid FollowDto dto,BindingResult bindingResult) {
 
@@ -117,11 +124,11 @@ public class UserController {
         return new CommonDto<>(HttpStatus.OK.value(), Response.SUCCESS);
 
     }
-
+    @ApiOperation(value ="팔로워리스트확인",notes = "요청시 access토큰 첨부")
     //나를 팔로우한 사용자
     @GetMapping("/api/user/follow/{UserSeq}")
     public ResponseEntity<List<UserDto>> followerUserList(HttpServletRequest request, FollowDto dto
-            , @PathVariable("UserSeq") String UserSeq) {
+            ,@PathVariable("UserSeq") String UserSeq) {
 
         String token = request.getHeader("Authentication");
         log.info("token followingUserList {}", token);
@@ -135,6 +142,7 @@ public class UserController {
     }
 
     //내가 팔로우한 사용자
+    @ApiOperation(value ="팔로잉한유저리스트확인",notes = "요청시 access토큰 첨부")
     @GetMapping("/api/user/following/{UserSeq}")
     public ResponseEntity<List<UserDto>> followingUserList(HttpServletRequest request, FollowDto dto
             , @PathVariable("UserSeq") String UserSeq) {
@@ -151,22 +159,11 @@ public class UserController {
 
     }
 
-    //oauth2 로그인 후 처리 토큰 발급 api
-/*    @GetMapping(value = "/api/oauth/redirect")
-    public CommonDto<Token> getToken(HttpServletResponse response
-                                    , @RequestParam(value = "token", required = false) String token
-                                    , @RequestParam(value = "refresh", required = false) String refresh) {
 
-
-        response.addHeader("Authentication", token);
-        response.addHeader("Refresh", refresh);
-
-        Token tokens = new Token(token,refresh);
-
-        return new CommonDto<>(HttpStatus.OK.value(),tokens);
-    }*/
+    @ApiOperation(value ="회원가입")
+    @ApiResponse(responseCode = "200", description = "회원 가입 성공", content = @Content(schema = @Schema(implementation = CommonDto.class)))
     @PostMapping(value="/join")
-    public CommonDto<?> JoinUsers(@RequestBody @Valid UserDto dto, BindingResult bindingResult){
+    public CommonDto<Token> JoinUsers(@RequestBody @Valid UserDto dto, BindingResult bindingResult){
 
 
          String username = userService.saveUserDetails(dto);
