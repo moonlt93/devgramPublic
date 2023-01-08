@@ -20,5 +20,5 @@
 
 ## API SERVER ISSUE SOLVE 
 - 현재 유저 정보 수정 API가 LOCAL 환경에서는 작동하나,
-- EC2 인스턴스 배포중인 API서버에서는 에러발생 
+EC2 인스턴스 배포중인 API서버에서는 에러발생 
 => 해결중
